@@ -1,0 +1,14 @@
+# Compiled simulation files
+sim/ev_controller
+*.vvp
+*.out
+
+# Simulation waveform
+sim/*.vcd
+
+# Yosys intermediate files
+*.dot
+
+# Temporary files
+*.log
+*.tmp

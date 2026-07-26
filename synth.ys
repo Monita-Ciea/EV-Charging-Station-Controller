@@ -1,0 +1,17 @@
+read_verilog rtl/ev_controller.v
+
+hierarchy -check -top ev_controller
+
+proc
+opt
+
+fsm
+opt
+
+memory
+opt
+
+techmap
+opt
+
+show -format png -prefix images/rtl_schematic
