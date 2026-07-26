@@ -1,106 +1,115 @@
 # EV Charging Station Controller using Verilog HDL
 
-## Overview
+An RTL design project that implements an **EV Charging Station Controller** using a **Finite State Machine (FSM)** in Verilog HDL. The controller manages the charging process by monitoring vehicle detection, user authentication, charging status, and battery condition.
 
-This project implements an **EV Charging Station Controller** using **Verilog HDL** based on a **Finite State Machine (FSM)** architecture.
+The project demonstrates the complete RTL design flow, including design implementation, functional verification, waveform analysis, and RTL synthesis using open-source EDA tools.
 
-The controller is designed to manage the charging process of an electric vehicle by monitoring vehicle detection, user authentication, battery status, and charging conditions. The project demonstrates **RTL design, FSM implementation, functional simulation, and synthesis flow** using open-source EDA tools.
+---
+
+## Features
+
+- FSM-based EV charging control
+- Vehicle detection
+- User authentication
+- Charging enable and disable control
+- Battery full detection
+- Charging completion indication
+- Error handling
+- Synthesizable Verilog RTL design
+- Functional verification using a testbench
 
 ---
 
 ## Tools Used
 
-- **Verilog HDL** - RTL Design
-- **Icarus Verilog** - Simulation
-- **GTKWave** - Waveform Analysis
-- **Yosys** - RTL Synthesis
-- **Ubuntu Linux (WSL)** - Development Environment
+- Verilog HDL
+- Icarus Verilog
+- GTKWave
+- Yosys
+- Ubuntu Linux (WSL)
 
 ---
 
-## Design
+## FSM Design
 
-The EV Charging Station Controller is implemented using a **Finite State Machine (FSM)** with five states.
+The controller is implemented using a **Finite State Machine (FSM)** with five states.
 
-### FSM States
+| State | Description |
+|-------|-------------|
+| **IDLE** | Waits for vehicle detection |
+| **AUTHENTICATION** | Verifies user authentication |
+| **CHARGING** | Enables charging after successful authentication |
+| **COMPLETED** | Indicates successful charging completion |
+| **ERROR** | Handles authentication failure or invalid conditions |
 
-### 1. IDLE
-- Initial state of the controller.
-- Waits for vehicle detection.
+### State Transition
 
-### 2. AUTHENTICATION
-- Verifies user authentication before starting charging.
-
-### 3. CHARGING
-- Enables charging when authentication is successful and all conditions are satisfied.
-
-### 4. COMPLETED
-- Indicates successful completion of the charging process.
-
-### 5. ERROR
-- Handles authentication failure or invalid operating conditions.
-
-### State Transition Flow
-
-```
-IDLE
-  |
-  v
-AUTHENTICATION
-  |
-  | Authentication Successful
-  v
-CHARGING
-  |
-  | Battery Full
-  v
-COMPLETED
-
-
-Authentication Failed
-          |
-          v
-        ERROR
+```text
+               +----------------+
+               |     IDLE       |
+               +----------------+
+                       |
+              Vehicle Detected
+                       |
+                       v
+          +-------------------------+
+          |   AUTHENTICATION        |
+          +-------------------------+
+            |                   |
+ Authentication         Authentication
+   Successful              Failed
+            |                   |
+            v                   v
+     +--------------+     +------------+
+     |   CHARGING   |     |   ERROR    |
+     +--------------+     +------------+
+            |
+      Battery Full
+            |
+            v
+     +--------------+
+     |  COMPLETED   |
+     +--------------+
 ```
 
 ---
 
 ## Project Structure
 
-```
+```text
 EV-Charging-Station-Controller
 │
+├── LICENSE
+├── README.md
+├── synth.ys
+│
 ├── rtl
-│   └── ev_controller.v          # RTL design
+│   └── ev_controller.v
 │
 ├── tb
-│   └── ev_controller_tb.v       # Testbench
+│   └── ev_controller_tb.v
 │
 ├── sim
-│   ├── ev_controller            # Simulation executable
-│   └── ev_controller.vcd        # Waveform output
+│   ├── ev_controller
+│   └── ev_controller.vcd
 │
 ├── images
 │   ├── block_diagram.png
 │   ├── fsm_diagram.png
+│   ├── rtl_design_output.png
 │   ├── rtl_schematic.png
 │   └── waveform.png
 │
-├── docs
-│   ├── EV_Charging_Controller_Report.pdf
-│   └── EV_Charging_Controller_Report.docx
-│
-├── synth.ys
-├── README.md
-└── LICENSE
-
+└── docs
+    ├── EV CHARGING STATION CONTROLLER USING VERILOG HDL.docx
+    └── EV_Charging_Controller_Report.pdf
 ```
 
 ---
 
 ## How to Run
 
-### Compile RTL and Testbench
+### Compile
 
 ```bash
 iverilog -o sim/ev_controller rtl/ev_controller.v tb/ev_controller_tb.v
@@ -122,74 +131,108 @@ gtkwave sim/ev_controller.vcd
 
 ## Simulation Results
 
-The simulation verifies the functionality of the EV Charging Controller.
+The functionality of the controller was verified through simulation.
 
-The following operations are successfully tested:
+The testbench validates:
 
 - Vehicle detection
 - User authentication
-- Authentication success condition
-- Authentication failure handling
-- Charging activation
+- Successful charging sequence
 - Battery full detection
 - Charging completion
-- Error state operation
+- Authentication failure handling
+- Error state transition
 
 ---
 
-## Waveform
+## Block Diagram
 
-Simulation waveform generated using GTKWave:
+System-level architecture of the EV Charging Station Controller.
+
+![Block Diagram](images/block_diagram.png)
+
+---
+
+## FSM Diagram
+
+Finite State Machine implemented in the controller.
+
+![FSM Diagram](images/fsm_diagram.png)
+
+---
+
+## Simulation Waveform
+
+Simulation results generated using **GTKWave**.
 
 ![Simulation Waveform](images/waveform.png)
 
 ---
 
-## RTL Design
+## RTL Schematic
 
-RTL design output generated after synthesis:
+RTL schematic generated using **Yosys** after synthesis.
+
+![RTL Schematic](images/rtl_schematic.png)
+
+---
+
+## RTL Design Output
+
+RTL design visualization generated after synthesis.
 
 ![RTL Design Output](images/rtl_design_output.png)
 
 ---
 
-## Synthesis
+## RTL Synthesis
 
-The RTL design is synthesized using **Yosys**.
+The design is synthesized using **Yosys**.
 
-Synthesis script:
+Run the synthesis script:
 
+```bash
+yosys synth.ys
 ```
-synth.ys
-```
 
-The synthesis flow converts the Verilog RTL design into a gate-level representation and provides information about the implemented hardware structure.
+The synthesis process converts the Verilog RTL design into an RTL netlist and provides synthesis statistics for the implemented hardware.
 
 ---
 
 ## Learning Outcomes
 
-- Designed an FSM-based digital control system
-- Implemented sequential logic using Verilog HDL
-- Developed RTL design and verification environment
-- Performed simulation using Icarus Verilog
-- Analyzed timing behavior using GTKWave
-- Understood RTL synthesis flow using Yosys
-- Gained practical experience in VLSI design methodology
+Through this project, the following concepts were explored:
+
+- RTL Design using Verilog HDL
+- Finite State Machine (FSM) implementation
+- Sequential logic design
+- Functional verification using testbenches
+- Waveform analysis with GTKWave
+- RTL synthesis using Yosys
+- Open-source VLSI design flow
 
 ---
 
 ## Applications
 
-- Electric Vehicle charging systems
-- Smart charging stations
-- Digital control systems
-- FSM-based automation controllers
-- RTL design and verification learning platforms
+- Electric Vehicle Charging Stations
+- Smart Charging Infrastructure
+- Industrial Automation
+- Digital Control Systems
+- FPGA and ASIC Design Projects
 
 ---
 
-## 👩‍💻 Author
+## Documentation
+
+The complete project report is available in the **docs/** directory.
+
+- **EV_Charging_Controller_Report.pdf**
+- **EV CHARGING STATION CONTROLLER USING VERILOG HDL.docx**
+
+---
+
+## Author
 
 **Monita Ciea Salins**
 
@@ -202,4 +245,4 @@ GitHub: https://github.com/Monita-Ciea
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**. See the **LICENSE** file for more information.
